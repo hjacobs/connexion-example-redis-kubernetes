@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+connexion = "*"
+gevent = "*"
+greenlet = {version = "*", platform_python_implementation="=='CPython'"}
+redis = "*"
+
+[dev-packages]
+black = "*"
+"flake8" = "*"
+pytest = "*"
+
+[requires]
+python_version = "3.6"
+
+[pipenv]
+allow_prereleases = true
