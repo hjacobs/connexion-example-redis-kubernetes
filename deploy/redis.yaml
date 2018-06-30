@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "connexion-example-redis"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: "connexion-example"
+      component: redis
+  serviceName: "connexion-example-redis"
+  template:
+    metadata:
+      labels:
+        application: "connexion-example"
+        component: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:4-alpine
+          args: ["--appendonly", "yes", "--save", "900", "1", "--save", "30", "2"]
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi
+
+

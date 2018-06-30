@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: connexion-example
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      application: connexion-example
+      component: frontend
+  template:
+    metadata:
+      labels:
+        application: connexion-example
+        component: frontend
+    spec:
+      containers:
+        - name: connexion-example
+          image: connexion-example:local-minikube
+          env:
+            - name: REDIS_HOST
+              value: "connexion-example-redis"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 80Mi
+            limits:
+              memory: 80Mi
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000

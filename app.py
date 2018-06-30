@@ -65,6 +65,15 @@ def delete_pet(pet_id):
         return NoContent, 404
 
 
+def get_health():
+    try:
+        r.ping()
+    except Exception:
+        return connexion.problem(503, "Service Unavailable", "Unhealthy")
+    else:
+        return "Healthy"
+
+
 logging.basicConfig(level=logging.INFO)
 app = connexion.App(__name__)
 app.add_api("swagger.yaml")
