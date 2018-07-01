@@ -92,3 +92,10 @@ Success       [ratio]                  100.00%
 Status Codes  [code:count]             200:6000
 Error Set:
 ```
+
+## High Availability
+
+While the setup gracefully handles rolling deployments (try it out by changing a pod label in `deploy/deployment.yaml` and doing `kubectl apply -f deploy/`),
+it cannot handle Redis downtimes without causing HTTP errors. Deleting the Redis pod causes a ~10 seconds unavailability for the REST service:
+
+![Vegeta Plot for unavailability caused by Redis downtime](vegeta-plot-redis-pod-deleted.png)
