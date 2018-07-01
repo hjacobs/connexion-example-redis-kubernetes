@@ -1,8 +1,30 @@
 # Connexion Example REST Service with Redis Store
 
 This example application implements a very basic "pet shop" REST service using the [Connexion](https://github.com/zalando/connexion) Python library.
+Unlike [hjacobs/connexion-example](https://github.com/hjacobs/connexion-example), this setup includes Redis as a persistent storage and Kubernetes deployment manifests.
+
+QUICKSTART: Please follow the [steps to deploy to Kubernetes (Minikube)](#deploying-to-kubernetes-minikube).
+
+This example should demonstrate:
+
+* how to map an [OpenAPI/Swagger specification](https://github.com/OAI/OpenAPI-Specification) to Python code with Connexion
+* how to run Connexion with [gevent](http://www.gevent.org/)
+* how to build a Docker image for Connexion
+* how to integrate a simple persistent database (Redis)
+* how to set up Kubernetes manifests for deployment and making sure rolling updates do not cause downtime
+* how to configure some best practices for production usage
+
+This example is NOT:
+
+* a real world application (unless you need a REST service to store pets)
+* a production-ready service
+* a best practice setup for a persistent database (Redis has its own issues, but is used here to keep the database part simple)
+
+DISCLAIMER: While trying to show some best practices for production usage, this is still just an example project --- especially the Redis database setup is not highly available (single replica).
 
 ## Local Development
+
+This requires [Pipenv](https://docs.pipenv.org/):
 
 ```
 pipenv install --dev
@@ -14,7 +36,7 @@ xdg-open http://localhost:8080/ui/
 
 ## Deploying to Kubernetes (Minikube)
 
-Start [Minikube](https://github.com/kubernetes/minikube):
+First install and then start [Minikube](https://github.com/kubernetes/minikube):
 
 ```
 minikube start

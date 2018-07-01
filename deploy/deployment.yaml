@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
         - name: connexion-example
+          # Docker image to be build with Minikube's Docker daemon (minikube docker-env)
           image: connexion-example:local-minikube
           env:
             - name: REDIS_HOST
@@ -33,6 +34,7 @@ spec:
               path: /health
               port: 8080
           securityContext:
+            # security best practice: run with read-only container file system
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 1000
