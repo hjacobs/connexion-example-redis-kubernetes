@@ -6,6 +6,7 @@ import sys
 import time
 
 CHARS = ' ▁▂▃▄▅▆▇█'
+UNKNOWN = '▒'
 
 
 @click.command()
@@ -31,7 +32,7 @@ def main(delimiter, height):
         click.clear()
         for y in range(height-1, -1, -1):
             label = ymin + (ymax - ymin) * y
-            print('{:.2f}ms - '.format(label/(1000**2)).rjust(12), end='')
+            print('{:.2f}ms ┤'.format(label/(1000**2)).rjust(16), end='')
             for record in data:
                 yvalue = record[2]
                 status = record[1]
@@ -44,8 +45,14 @@ def main(delimiter, height):
                 val = 1. * (yvalue - ymin)/(ymax - ymin) * height
                 idx = min(max(round(len(CHARS) * (val - y)), 0), len(CHARS)-1)
                 char = CHARS[idx]
+                if yvalue == 0:
+                    char = UNKNOWN
                 click.secho(char, nl=False, fg=color)
             print()
+        print(' ' * 16, end='')
+        for i in range(100):
+            print('┬', end='')
+        print()
         last_refresh = time.time()
 
 
