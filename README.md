@@ -99,3 +99,5 @@ While the setup gracefully handles rolling deployments (try it out by changing a
 it cannot handle Redis downtimes without causing HTTP errors. Deleting the Redis pod causes a ~10 seconds unavailability for the REST service:
 
 ![Vegeta Plot for unavailability caused by Redis downtime](vegeta-plot-redis-pod-deleted.png)
+
+The above latency cap at 5000ms reflects the configured Redis socket timeout of 5 seconds.
