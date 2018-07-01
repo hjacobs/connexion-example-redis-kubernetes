@@ -1,14 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: connexion-example
   labels:
     application: connexion-example
-  name: connexion-example
 spec:
   selector:
     application: connexion-example
+    # select the Connexion pods (we would also match Redis pods without this label)
     component: frontend
-  # user NodePort for Minikube
+  # use NodePort to expose service for Minikube
   type: NodePort
   ports:
     - port: 80

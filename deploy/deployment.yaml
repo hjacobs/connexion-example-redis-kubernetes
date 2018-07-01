@@ -3,38 +3,49 @@ kind: Deployment
 metadata:
   name: connexion-example
 spec:
+  # run at least two replicas for high availability
   replicas: 2
   selector:
     matchLabels:
       application: connexion-example
+      # our app has both Connexion and Redis pods, make sure we separate them by label
       component: frontend
   template:
     metadata:
       labels:
         application: connexion-example
+        # our app has both Connexion and Redis pods, make sure we separate them by label
         component: frontend
     spec:
       containers:
         - name: connexion-example
           # Docker image to be build with Minikube's Docker daemon (minikube docker-env)
+          # see README.md on how to build
           image: connexion-example:local-minikube
           env:
             - name: REDIS_HOST
+              # point to our Redis service (see redis-service.yaml)
               value: "connexion-example-redis"
           resources:
             requests:
+              # this app does not need much CPU
               cpu: 10m
+              # as best practice, the memory requests should equal the limit
               memory: 80Mi
             limits:
+              # no CPU limit is configured to avoid CPU throttling (CFS quota)
+              # set max memory (reaching the limit will OOMKill the container)
               memory: 80Mi
           ports:
             - containerPort: 8080
           readinessProbe:
             httpGet:
+              # health check to make sure only healthy pods receive traffic
               path: /health
               port: 8080
           securityContext:
             # security best practice: run with read-only container file system
             readOnlyRootFilesystem: true
+            # security best practice: run as unprivileged user instead of root
             runAsNonRoot: true
             runAsUser: 1000

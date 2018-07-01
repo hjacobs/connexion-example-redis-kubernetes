@@ -1,7 +1,7 @@
 # Connexion Example REST Service with Redis Store
 
 This example application implements a very basic "pet shop" REST service using the [Connexion](https://github.com/zalando/connexion) Python library.
-Unlike [hjacobs/connexion-example](https://github.com/hjacobs/connexion-example), this setup includes Redis as a persistent storage and Kubernetes deployment manifests.
+Compared to [hjacobs/connexion-example](https://github.com/hjacobs/connexion-example), this setup focuses more on operational aspects and includes Redis as a persistent storage and Kubernetes deployment manifests.
 
 QUICKSTART: Please follow the [steps to deploy to Kubernetes (Minikube)](#deploying-to-kubernetes-minikube).
 

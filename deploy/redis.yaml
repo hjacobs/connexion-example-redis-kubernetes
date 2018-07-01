@@ -1,28 +1,35 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: "connexion-example-redis"
+  name: connexion-example-redis
 spec:
+  # our Redis setup is not highly available and only has a single master
   replicas: 1
   selector:
     matchLabels:
-      application: "connexion-example"
+      application: connexion-example
+      # our app has both Connexion and Redis pods, make sure we separate them by label
       component: redis
-  serviceName: "connexion-example-redis"
+  serviceName: connexion-example-redis
   template:
     metadata:
       labels:
         application: "connexion-example"
+        # our app has both Connexion and Redis pods, make sure we separate them by label
         component: redis
     spec:
       containers:
         - name: redis
+          # use the official Redis image (smaller Alpine edition)
           image: redis:4-alpine
+          # configure persistence (the Redis default config has persistence disabled by default)
           args: ["--appendonly", "yes", "--save", "900", "1", "--save", "30", "2"]
           ports:
             - containerPort: 6379
           volumeMounts:
+            # mount our persistent volume (defined below as volumeClaimTemplate)
             - name: data
+              # the official Redis image uses /data by default
               mountPath: /data
   volumeClaimTemplates:
     - metadata:
@@ -33,6 +40,7 @@ spec:
         storageClassName: standard
         resources:
           requests:
+            # 1GiB storage is more than enough for our example
             storage: 1Gi
 
 

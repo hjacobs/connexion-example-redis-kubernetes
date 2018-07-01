@@ -15,6 +15,9 @@ from connexion import NoContent
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
 
+logger = logging.getLogger(__name__)
+
+# the socket_timeout parameter is rather important as the default is "no timeout" :-/
 r = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=0, socket_timeout=5)
 
 
@@ -31,6 +34,7 @@ def get_pets(limit: int, animal_type=None):
 
 
 def _get_pet(pet_id: str) -> dict:
+    """Get Pet object from Redis"""
     pet = r.get(get_redis_key(pet_id))
     if pet:
         pet = json.loads(pet)
@@ -46,11 +50,11 @@ def put_pet(pet_id: str, pet):
     exists = _get_pet(pet_id)
     pet["id"] = pet_id
     if exists:
-        logging.info("Updating pet %s..", pet_id)
+        logger.info("Updating pet %s..", pet_id)
         exists.update(pet)
         pet = exists
     else:
-        logging.info("Creating pet %s..", pet_id)
+        logger.info("Creating pet %s..", pet_id)
         pet["created"] = datetime.datetime.utcnow().isoformat()
     r.set(get_redis_key(pet_id), json.dumps(pet))
     return NoContent, (200 if exists else 201)
@@ -59,7 +63,7 @@ def put_pet(pet_id: str, pet):
 def delete_pet(pet_id: str):
     exists = _get_pet(pet_id)
     if exists:
-        logging.info("Deleting pet %s..", pet_id)
+        logger.info("Deleting pet %s..", pet_id)
         r.delete(get_redis_key(pet_id))
         return NoContent, 204
     else:
