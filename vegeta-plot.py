@@ -20,8 +20,16 @@ def refresh(data, height):
         ymax = ymin + 0.1
     click.clear()
     for y in range(height-1, -1, -1):
-        label = ymin + (ymax - ymin) * y
-        print('{:.2f}ms ┤'.format(label/(1000**2)).rjust(16), end='')
+        label = ymin + (ymax - ymin) * ((y + 0.5)/height)
+        div = 1  # 1000**2
+        unit = 'ms'
+        if y == height-1:
+            char = '┐'
+        elif y == 0:
+            char = '┘'
+        else:
+            char = '┤'
+        print('{:.2f}{} {}'.format(label/div, unit, char).rjust(16), end='')
         for record in data:
             yvalue = record[min(2, len(record)-1)]
             if len(record) > 2:
@@ -35,7 +43,7 @@ def refresh(data, height):
             else:
                 color = 'red'
             val = 1. * (yvalue - ymin)/(ymax - ymin) * height
-            idx = min(max(round(len(CHARS) * (val - y)), 0), len(CHARS)-1)
+            idx = min(max(int(len(CHARS) * (val - y)), 0), len(CHARS)-1)
             char = CHARS[idx]
             if yvalue == 0:
                 char = UNKNOWN
