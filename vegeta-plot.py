@@ -21,7 +21,7 @@ def refresh(data, height):
     click.clear()
     for y in range(height-1, -1, -1):
         label = ymin + (ymax - ymin) * ((y + 0.5)/height)
-        div = 1  # 1000**2
+        div = 1000**2
         unit = 'ms'
         if y == height-1:
             char = '┐'
