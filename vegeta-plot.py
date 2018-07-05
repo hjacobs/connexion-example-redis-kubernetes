@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+'''
+Usage:
+
+echo 'GET http://example.org' | vegeta attack | vegeta dump -dumper=csv | ./vegeta-plot.py
+'''
 
 import click
 import collections
